@@ -1,0 +1,28 @@
+{
+  "name": "microservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunnyjain123/microservice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunnyjain123/microservice/issues"
+  },
+  "homepage": "https://github.com/sunnyjain123/microservice#readme",
+  "dependencies": {
+    "mongoose": "^4.11.8",
+    "mongoose-string-query": "^0.2.5",
+    "mongoose-timestamp": "^0.6.0",
+    "restify": "^5.2.0",
+    "restify-errors": "^5.0.0",
+    "restify-plugins": "^1.6.0"
+  }
+}
