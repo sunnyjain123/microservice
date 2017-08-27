@@ -10,6 +10,14 @@ var generateToken = function(req, res){
 	if(typeof req.body == 'string'){
 		return res.json({ success: false, message: 'Something went wrong. Please send data as an object.' });
 	}
+
+	if(!req.body.username){
+		return res.json({ success: false, message: 'Authetication failed. Please check username or password.' });
+	}
+
+	if(!req.body.password){
+		return res.json({ success: false, message: 'Authetication failed. Please check username or password.' });
+	}
 	
 	var newUser = {
 		username : req.body.username,

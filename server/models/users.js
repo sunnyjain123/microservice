@@ -11,7 +11,7 @@ var usersSchema = new Schema({
 		type : String,
 		default : ''
 	},
-	access_token : {
+	token : {
 		type : String,
 		default : ''
 	},
