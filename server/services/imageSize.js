@@ -1,29 +1,21 @@
 var mongoose = require('mongoose');
 var jwt    = require('jsonwebtoken');
 var config = require('./../../config/config');
-var jsonpatch = require('json-patch');
 
 require('./../models/users')
 
 var user = mongoose.model('user');
 
-var jsonPatch = function(req, res){
+var imageSizeChange = function(req, res){
 	if(!req.headers.token){
 		return res.json({ success: false, message: 'Please provide access token.' });
 	}
-
-	if(!req.body.obj){
-		return res.json({ success: false, message: 'Please provide a valid object ot patch.' });
-	}
-
-	if(!req.body.patch){
-		return res.json({ success: false, message: 'Please provide a valid patch data.' });
+	
+	if(!req.body.image){
+		return res.json({ success: false, message: 'Please provide a image url to resize.' });
 	}
 
 	try{
-		var obj = JSON.parse(req.body.obj);
-		var patch = JSON.parse(req.body.patch);
-
 		jwt.verify(req.headers.token, config.secret, function(err, decoded) {      
 			if (err) {
 				return res.json({ success: err, message: 'Failed to authenticate token. Please login again or try after some time. 1' });
@@ -34,21 +26,17 @@ var jsonPatch = function(req, res){
 					}else if(!resultUser){
 						return res.json({ success: err, message: 'Failed to authenticate token. Please login again or try after some time. 3' });
 					}else{
-						try{
-							var patchObject = jsonpatch.apply(obj, patch);
-							return res.json(patchObject);
-						}catch(e){
-							return res.json({ success: false, message: 'Something went wrong. Please provide a valid patch data.' });
-						}
+						return res.json(decoded);
 					}
 				})
 			}
 		});
 	}catch(err){
-		return res.json({ success: false, message: 'Something went wrong. Please provide a valid patch Data.' });
+		return res.json({ success: false, message: 'Something went wrong. Please provide a valid image Data.' });
 	}
 }
 
+
 module.exports = {
-	jsonPatch : jsonPatch
+	imageSizeChange : imageSizeChange
 }
