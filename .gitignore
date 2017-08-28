@@ -1,2 +1,7 @@
+# --------------------
+# Node Files To ignore
+# --------------------
 npm-debug.log
 node_modules/
+download/
+resize/

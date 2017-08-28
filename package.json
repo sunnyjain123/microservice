@@ -18,11 +18,14 @@
   },
   "homepage": "https://github.com/sunnyjain123/microservice#readme",
   "dependencies": {
+    "fs": "0.0.1-security",
     "json-patch": "^0.7.0",
     "jsonwebtoken": "^7.4.3",
+    "lwip": "0.0.9",
     "mongoose": "^4.11.8",
     "mongoose-string-query": "^0.2.5",
     "mongoose-timestamp": "^0.6.0",
+    "request": "^2.81.0",
     "restify": "^5.2.0",
     "restify-errors": "^5.0.0",
     "restify-plugins": "^1.6.0"

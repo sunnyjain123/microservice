@@ -14,6 +14,8 @@ var server = restify.createServer({
 	version: config.version,
 });
 
+config.directoryPath = __dirname;
+
 /**
 	* Middleware
 */
