@@ -1,26 +1,23 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'); // Requied to access mongodb
+var Schema   = mongoose.Schema; // To create schema
 
-
-var usersSchema = new Schema({
+var usersSchema = new Schema({ // Schema of user
 	username : {
 		type : String,
-		default : '' // title of product
+		default : '' // name of user
 	},
 	password : {
 		type : String,
-		default : ''
+		default : '' // Password of user
 	},
 	token : {
 		type : String,
-		default : ''
+		default : '' // Token of user
 	},
 	expires_at : {
 		type : Date,
-		default : new Date()
+		default : new Date() // Expirey Date of token
 	}
 });
 
-
-mongoose.model('user', usersSchema);
-
+module.exports = mongoose.model('user', usersSchema);

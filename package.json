@@ -1,33 +1,37 @@
 {
-  "name": "microservice",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "npm test",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sunnyjain123/microservice.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sunnyjain123/microservice/issues"
-  },
-  "homepage": "https://github.com/sunnyjain123/microservice#readme",
-  "dependencies": {
-    "fs": "0.0.1-security",
-    "json-patch": "^0.7.0",
-    "jsonwebtoken": "^7.4.3",
-    "lwip": "0.0.9",
-    "mongoose": "^4.11.8",
-    "mongoose-string-query": "^0.2.5",
-    "mongoose-timestamp": "^0.6.0",
-    "request": "^2.81.0",
-    "restify": "^5.2.0",
-    "restify-errors": "^5.0.0",
-    "restify-plugins": "^1.6.0"
-  }
+	"name": "microservice",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "mocha --timeout 10000",
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sunnyjain123/microservice.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/sunnyjain123/microservice/issues"
+	},
+	"homepage": "https://github.com/sunnyjain123/microservice#readme",
+	"dependencies": {
+		"chai": "^4.1.1",
+		"chai-http": "^3.0.0",
+		"cloudinary": "^1.9.0",
+		"fs": "0.0.1-security",
+		"json-patch": "^0.7.0",
+		"jsonwebtoken": "^7.4.3",
+		"lwip": "0.0.9",
+		"mongoose": "^4.11.8",
+		"mongoose-string-query": "^0.2.5",
+		"mongoose-timestamp": "^0.6.0",
+		"request": "^2.81.0",
+		"restify": "^5.2.0",
+		"restify-errors": "^5.0.0",
+		"restify-plugins": "^1.6.0",
+		"winston": "^2.3.1"
+	}
 }

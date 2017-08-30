@@ -1,20 +1,18 @@
 /**
 	* Module Dependencies
 */
-var config = require('./config/config');
-var restify = require('restify');
-var mongoose = require('mongoose');
-var restifyPlugins = require('restify-plugins');
+var config 		   = require('./config/config'); // Config File
+var restify 	   = require('restify'); // Required to create server and nodejs framework
+var mongoose 	   = require('mongoose'); // Required to access mongodb
+var restifyPlugins = require('restify-plugins'); // Plugins of restify
 
 /**
 	* Initialize Server
 */
-var server = restify.createServer({
+var server = restify.createServer({ // Create server with restify
 	name: config.name,
 	version: config.version,
 });
-
-config.directoryPath = __dirname;
 
 /**
 	* Middleware
@@ -23,6 +21,7 @@ server.use(restifyPlugins.acceptParser(server.acceptable));
 server.use(restifyPlugins.queryParser({ mapParams: true }));
 server.use(restifyPlugins.bodyParser({}));
 
+// CORS set on all request
 server.use(
 	function crossOrigin(req, res, next) {
 		res.header("Access-Control-Allow-Origin", "*");
@@ -51,3 +50,6 @@ server.listen(config.port, () => {
 		console.log(`Server is listening on port ${config.port}`);
 	});
 });
+
+// Export for use in test server
+module.exports = server;
