@@ -20,41 +20,46 @@ var imageSizeChange = function(req, res){
 		return res.json({ success: false, message: 'Something went wrong. Please provide access token.' });
 	}
 
-	if(!req.body.image){ // Check if image is provided or not.
-		return res.json({ success: false, message: 'Something went wrong. Please provide a image url to resize.' });
-	}
+	// Check if data is provided or not
+	if(req.body){
+		if(!req.body.image){ // Check if image is provided or not.
+			return res.json({ success: false, message: 'Something went wrong. Please provide a image url to resize.' });
+		}
 
-	// Try to check if code generates an error
-	try{
-		// Name of the image
-		var imageName = req.body.image.split('/')[req.body.image.split('/').length - 1];
+		// Try to check if code generates an error
+		try{
+			// Name of the image
+			var imageName = req.body.image.split('/')[req.body.image.split('/').length - 1];
 
-		// Verify Provided JWT Token is valid or not.
-		jwt.verify(req.headers.token, config.secret, function(err, decoded) {
-			if (err) { // If wrong token provided
-				return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
-			} else {
-				// Find if user is present or not
-				user.findOne({username : decoded.username, password : decoded.password}, function(errUser, resultUser){
-					if(err){ // If something went wrong in finding user
-						return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
-					}else if(!resultUser){ // If user not found
-						return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
-					}else{
-						// Resize the image
-						resizeImage(req.body.image, imageName, function(err, resp){
-							if(err){ // If problem in resizing image
-								return res.json(err);
-							}else{
-								winston.info(resp);
-								return res.json(resp);
-							}
-						})
-					}
-				})
-			}
-		});
-	}catch(err){ // If function throws an error.
+			// Verify Provided JWT Token is valid or not.
+			jwt.verify(req.headers.token, config.secret, function(err, decoded) {
+				if (err) { // If wrong token provided
+					return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
+				} else {
+					// Find if user is present or not
+					user.findOne({username : decoded.username, password : decoded.password}, function(errUser, resultUser){
+						if(err){ // If something went wrong in finding user
+							return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
+						}else if(!resultUser){ // If user not found
+							return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
+						}else{
+							// Resize the image
+							resizeImage(req.body.image, imageName, function(err, resp){
+								if(err){ // If problem in resizing image
+									return res.json(err);
+								}else{
+									winston.info(resp);
+									return res.json(resp);
+								}
+							})
+						}
+					})
+				}
+			});
+		}catch(err){ // If function throws an error.
+			return res.json({ success: false, message: 'Something went wrong. Please provide a valid image Data.' });
+		}
+	}else{
 		return res.json({ success: false, message: 'Something went wrong. Please provide a valid image Data.' });
 	}
 }
@@ -77,12 +82,12 @@ var resizeImage = function(image, imageName, callback){
 							callback({success : false, message : 'Something went wrong. please try again.'});
 						}else{
 							// Write file in system
-							image.writeFile('./download/50x50'+ imageName, function(err){
+							image.writeFile('./download/50x50_'+ imageName, function(err){
 								if(err){
 									callback({success : false, message : 'Something went wrong. please try again.'});
 								}else{
 									// Upload image to cloudinary
-									cloudinary.uploader.upload('./download/50x50'+ imageName, function(result) { 
+									cloudinary.uploader.upload('./download/50x50_'+ imageName, function(result) { 
 										if(result){ // If image uploaded successfully
 											callback(null, {success : true, url : result.secure_url});
 										}else{ // If image not uploaded successfully
