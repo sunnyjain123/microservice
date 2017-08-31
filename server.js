@@ -49,7 +49,7 @@ server.listen(config.port, () => {
 
 	db.once('open', () => {
 		require('./server/routes')(server);
-		winston.info(`Server is listening on port ${config.port}`);
+		console.log(`Server is listening on port ${config.port}`);
 	});
 });
 

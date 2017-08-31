@@ -3,8 +3,8 @@ var jwt    	    = require('jsonwebtoken'); // Required to generate JWT Token
 var config 	    = require('./../../config/config'); // To access config file
 var jsonpatch   = require('json-patch'); // Required to patch json
 var user 	    = require('./../models/users'); // Required to access user schema modal
-var winston     = require('winston'); // Winston for logging
 var userService = require('./user'); // Required to access token verify function
+var patchLog   = require('./../../logger').patch; // Required to access logs for authentication api
 
 /**
 	* @swagger
@@ -38,7 +38,7 @@ var userService = require('./user'); // Required to access token verify function
 
 // Function to generate patched json and return it
 var jsonPatch = function(req, res){
-	winston.info('API : /api/1.0/jsonPatch ' + new Date());
+	patchLog.info('API : /api/1.0/jsonPatch ' + new Date());
 	if(!req.headers.token){ // Check if token is provided or not.
 		return res.json({ success: false, message: 'Something went wrong. Please provide access token.' });
 	}
@@ -47,6 +47,7 @@ var jsonPatch = function(req, res){
 	if(req.body){
 		// Check if data is provided or not
 		if(!req.body.obj || !req.body.patch){
+			patchLog.error({ success: false, message: 'Something went wrong. Please provide valid Data.' })
 			return res.json({ success: false, message: 'Something went wrong. Please provide valid Data.' });
 		}
 
@@ -65,13 +66,15 @@ var jsonPatch = function(req, res){
 			// Verify Provided JWT Token is valid or not.
 			userService.verifyToken(req.headers.token, function(err, result){
 				if(err){ // If Token is not valid send error
+					patchLog.error(err);
 					return res.json(err);
 				}else{
 					try{ // Try to check if json is patched perfectly or not
 						var patchObject = jsonpatch.apply(obj, patch);
-						winston.info(patchObject);
+						patchLog.info(patchObject);
 						return res.json(patchObject);
 					}catch(e){ // If provided data is not correct
+						patchLog.error(e);
 						return res.json({ success: false, message: 'Something went wrong. Please provide valid Data.' });
 					}
 				}

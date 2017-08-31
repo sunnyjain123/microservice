@@ -4,10 +4,10 @@ var config      = require('./../../config/config'); // To access config file
 var lwip        = require('lwip'); // Required to resize image
 var fs          = require('fs'); // File System to read files
 var request     = require('request'); // Request used to Get image
-var winston     = require('winston'); // Winston for logging
 var cloudinary  = require('cloudinary'); // Required to upload file
 var user        = require('./../models/users'); // Required to access user schema modal
 var userService = require('./user'); // Required to access token verify function
+var resizeLog   = require('./../../logger').resize; // Required to access logs for resize api
 
 cloudinary.config({ // Configuration of cloudinary
 	cloud_name: 'djfe3xi4i', 
@@ -42,8 +42,9 @@ cloudinary.config({ // Configuration of cloudinary
 
 // Function to resize image and return it
 var imageSizeChange = function(req, res){
-	winston.info('API : /api/1.0/imageSizeChange ' + new Date());
+	resizeLog.info('API : /api/1.0/imageSizeChange ' + new Date());
 	if(!req.headers.token){ // Check if token is provided or not.
+		resizeLog.error('No token provided');
 		return res.json({ success: false, message: 'Something went wrong. Please provide access token.' });
 	}
 
@@ -61,6 +62,7 @@ var imageSizeChange = function(req, res){
 			// Verify Provided JWT Token is valid or not.
 			userService.verifyToken(req.headers.token, function(err, result){
 				if(err){ // If Token is not valid send error
+					resizeLog.error(err);
 					return res.json(err);
 				}else{
 					// Resize the image
@@ -68,7 +70,7 @@ var imageSizeChange = function(req, res){
 						if(err){ // If problem in resizing image
 							return res.json(err);
 						}else{
-							winston.info(resp);
+							resizeLog.info(resp);
 							return res.json(resp);
 						}
 					})
