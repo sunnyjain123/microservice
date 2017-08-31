@@ -1,5 +1,4 @@
 var mongoose    = require('mongoose'); // Required to run commands on mongodb
-var jwt         = require('jsonwebtoken'); // Required to generate JWT Token
 var config      = require('./../../config/config'); // To access config file
 var lwip        = require('lwip'); // Required to resize image
 var fs          = require('fs'); // File System to read files

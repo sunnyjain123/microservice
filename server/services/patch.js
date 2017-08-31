@@ -1,5 +1,4 @@
 var mongoose    = require('mongoose'); // Required to run commands on mongodb
-var jwt    	    = require('jsonwebtoken'); // Required to generate JWT Token
 var config 	    = require('./../../config/config'); // To access config file
 var jsonpatch   = require('json-patch'); // Required to patch json
 var user 	    = require('./../models/users'); // Required to access user schema modal

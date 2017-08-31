@@ -1,5 +1,5 @@
 # --------------------
-# Node Files To ignore
+# Files To ignore
 # --------------------
 npm-debug.log
 node_modules/
