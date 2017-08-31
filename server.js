@@ -5,6 +5,8 @@ var config 		   = require('./config/config'); // Config File
 var restify 	   = require('restify'); // Required to create server and nodejs framework
 var mongoose 	   = require('mongoose'); // Required to access mongodb
 var restifyPlugins = require('restify-plugins'); // Plugins of restify
+var winston    	   = require('winston'); // Winston for logging
+
 
 /**
 	* Initialize Server
@@ -41,13 +43,13 @@ server.listen(config.port, () => {
 	var db = mongoose.connection;
 
 	db.on('error', (err) => {
-		console.error(err);
+		winston.error(err);
 		process.exit(1);
 	});
 
 	db.once('open', () => {
 		require('./server/routes')(server);
-		console.log(`Server is listening on port ${config.port}`);
+		winston.info(`Server is listening on port ${config.port}`);
 	});
 });
 

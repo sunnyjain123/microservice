@@ -1,12 +1,13 @@
-var mongoose   = require('mongoose'); // Required to run commands on mongodb
-var jwt    	   = require('jsonwebtoken'); // Required to generate JWT Token
-var config 	   = require('./../../config/config'); // To access config file
-var lwip 	   = require('lwip'); // Required to resize image
-var fs 		   = require('fs'); // File System to read files
-var request    = require('request'); // Request used to Get image
-var winston    = require('winston'); // Winston for logging
-var cloudinary = require('cloudinary'); // Required to upload file
-var user 	   = require('./../models/users'); // Required to access user schema modal
+var mongoose    = require('mongoose'); // Required to run commands on mongodb
+var jwt         = require('jsonwebtoken'); // Required to generate JWT Token
+var config      = require('./../../config/config'); // To access config file
+var lwip        = require('lwip'); // Required to resize image
+var fs          = require('fs'); // File System to read files
+var request     = require('request'); // Request used to Get image
+var winston     = require('winston'); // Winston for logging
+var cloudinary  = require('cloudinary'); // Required to upload file
+var user        = require('./../models/users'); // Required to access user schema modal
+var userService = require('./user'); // Required to access token verify function
 
 cloudinary.config({ // Configuration of cloudinary
 	cloud_name: 'djfe3xi4i', 
@@ -14,8 +15,34 @@ cloudinary.config({ // Configuration of cloudinary
 	api_secret: '8gKTl-HQ1eESSUDKZ6EyXO6ROxU' 
 });
 
+/**
+	* @swagger
+	*   Image Thumbnail Generation:
+	*     Url: /api/1.0/imageSizeChange
+	*     Description: Api to Generate thumbanil of given image
+	*     Type: post
+	*     produces:
+	*       - application/json
+	*     parameters:
+	*       - name: image
+	*         type: String
+	*         description: Image to resize
+	*         in: request body
+	*         required: true
+	*       - name: token
+	*         type: String
+	*         description: Token to verify user access
+	*         used : Image to resize
+	*         in: request header
+	*         required: true
+	*     responses:
+	*       200:
+	*         description: Returns Url of resized image
+*/
+
 // Function to resize image and return it
 var imageSizeChange = function(req, res){
+	winston.info('API : /api/1.0/imageSizeChange ' + new Date());
 	if(!req.headers.token){ // Check if token is provided or not.
 		return res.json({ success: false, message: 'Something went wrong. Please provide access token.' });
 	}
@@ -32,34 +59,25 @@ var imageSizeChange = function(req, res){
 			var imageName = req.body.image.split('/')[req.body.image.split('/').length - 1];
 
 			// Verify Provided JWT Token is valid or not.
-			jwt.verify(req.headers.token, config.secret, function(err, decoded) {
-				if (err) { // If wrong token provided
-					return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
-				} else {
-					// Find if user is present or not
-					user.findOne({username : decoded.username, password : decoded.password}, function(errUser, resultUser){
-						if(err){ // If something went wrong in finding user
-							return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
-						}else if(!resultUser){ // If user not found
-							return res.json({ success: false, message: 'Failed to authenticate token. Please login again or try after some time.' });
+			userService.verifyToken(req.headers.token, function(err, result){
+				if(err){ // If Token is not valid send error
+					return res.json(err);
+				}else{
+					// Resize the image
+					resizeImage(req.body.image, imageName, function(err, resp){
+						if(err){ // If problem in resizing image
+							return res.json(err);
 						}else{
-							// Resize the image
-							resizeImage(req.body.image, imageName, function(err, resp){
-								if(err){ // If problem in resizing image
-									return res.json(err);
-								}else{
-									winston.info(resp);
-									return res.json(resp);
-								}
-							})
+							winston.info(resp);
+							return res.json(resp);
 						}
 					})
 				}
-			});
+			})
 		}catch(err){ // If function throws an error.
 			return res.json({ success: false, message: 'Something went wrong. Please provide a valid image Data.' });
 		}
-	}else{
+	}else{ // If data is not provided
 		return res.json({ success: false, message: 'Something went wrong. Please provide a valid image Data.' });
 	}
 }
