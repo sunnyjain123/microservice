@@ -7,3 +7,4 @@
 3. Then Run npm install inside the folder from terminal to install all the dependencies.
 4. The run npm start to run the server. It will run on port 3000
 5. To run test cases run npm test.
+6. Run Istanbul cover _mocha for coverage report
