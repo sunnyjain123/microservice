@@ -1,6 +1,6 @@
 # microservice
 
-## Installation and how to run **
+## Installation and how to run
 
 1. Please insure if node, mongodb is installed and mongodb is running.
 2. Clone code from https://github.com/sunnyjain123/microservice
