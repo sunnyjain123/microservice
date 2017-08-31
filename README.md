@@ -1,5 +1,7 @@
 # microservice
 
+** Installation and how to run **
+
 1. Please insure if node, mongodb is installed and mongodb is running.
 2. Clone code from https://github.com/sunnyjain123/microservice
 3. Then Run npm install inside the folder from terminal to install all the dependencies.
