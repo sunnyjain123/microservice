@@ -1,4 +1,4 @@
-# microservice
+# Microservice
 
 ## Installation and how to run
 
